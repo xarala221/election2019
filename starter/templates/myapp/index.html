@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block javascript %}
+<script type="text/javascript">
+  $( document ).ready( function() {
+      $( '#q' ).keyup( function() {
+          q = $( '#q' ).val();
+          $( '#results' ).html( '&nbsp;' ).load( "{% url 'search' %}?q=" + q );
+      });
+  });
+  
+  </script>
+{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+          <form class="form-inline">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1">numero electeur</span>
+                </div>
+                <input type="text" id="q" name="keywords" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+              </div>
+            </form>
+      </div>
+      <div class="margin">
+          <div id="results"></div>
+      </div>
+ 
+    </div>
+    <div class="col-md-6">
+      
+      <div class="form">
+        <form action="" method="post">
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Nom de l'electeur</label>
+            <input type="text" class="form-control"  placeholder="nom" name="nom">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Prenom de l'electeur</label>
+            <input type="text" class="form-control"  placeholder="prenom" name="prenom">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">Region</label>
+            <select class="form-control" name="region">
+              <option  value="Dakar">Dakar</option>
+              <option value="Thies">Thies</option>
+              <option value="Louga">Louga</option>
+              <option value="Saint-louis">Saint-louis</option>
+              <option value="Diourbel">Diourbel</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="submit" value="Valider" class="btn btn-outline-success">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

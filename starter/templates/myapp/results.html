@@ -1,0 +1,32 @@
+{% if results|length %}
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nom</th>
+        <th scope="col">Prenom</th>
+        <th scope="col">Numero electeur</th>
+        <th scope="col">Numero identite</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for electeur in results %}
+      <tr>
+        <th scope="row">1</th>
+        <td>{{ electeur.prenom }}</td>
+        <td>{{ electeur.nom }}</td>
+        <td>{{ electeur.numero_electeur }}</td>
+        <td>{{ electeur.numero_identite }}</td>
+      </tr>
+      {% endfor %}
+      
+    </tbody>
+  </table>
+
+  {% else %}
+	<div class="note">
+	Your search yielded no results
+	</div>
+{% endif %}
+	
