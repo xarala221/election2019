@@ -1,0 +1,16 @@
+#header{
+  background: #10284e;
+  color: aliceblue;
+}
+#branding h1{
+  color: #ffffff;
+}
+
+div.breadcrumbs{
+  background: #30caa0;
+  color: #10284e;
+}
+
+#user-tools{
+  color: #30caa0;
+}
