@@ -55,6 +55,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# lgout redirect url
+LOGOUT_REDIRECT_URL = '/sign_in/'
 ROOT_URLCONF = 'starter.urls'
 
 TEMPLATES = [

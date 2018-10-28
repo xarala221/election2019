@@ -41,6 +41,10 @@ env/
 .venv
 venv/
 venv
+.deploy/
+.deploy
+deploy/
+deploy
 .idea
 .idea/
 build/
