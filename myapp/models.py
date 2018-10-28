@@ -15,7 +15,7 @@ class ListeElecteur(models.Model):
 class MonElecteur(models.Model):
   nom = models.CharField(max_length=120, null=True)
   prenom = models.CharField(max_length=120, null=True)
-  numero_electeur = models.CharField(max_length=120, null=True)
+  numero_electeur = models.CharField(max_length=120, null=True, unique=True)
   numero_identite  = models.CharField(max_length=120, null=True)
   region = models.CharField(max_length=120, null=True)
 

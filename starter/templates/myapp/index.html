@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block javascript %}
+{% extends "dashboard/index.html" %}
+{% block extrajs %}
 <script type="text/javascript">
   $( document ).ready( function() {
       $( '#q' ).keyup( function() {
@@ -7,22 +7,204 @@
           $( '#results' ).html( '&nbsp;' ).load( "{% url 'search' %}?q=" + q );
       });
   });
+
+  $(document).on('click', '.my_result', function () {
+    const person_id = $(this).attr("person_id")
+    console.log("id ", person_id)
+
+    $.ajax({
+      type:"GET",
+      url: '{% url "get_person_info" %}',
+      data: {
+        'person_id' : person_id,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      dataType: 'json',
+      success: function (data) {
+        const jsonData = JSON.parse(data)
+        console.log('client_info : ', jsonData)
+
+        var htmlContent = ''
+          for(i= 0 ; i < jsonData.length; i++ ) {
+
+
+            htmlContent += '<tr>'
+                  +'<td>'
+                      +'<input type="hidden" name="numero_electeur" value='+jsonData[i]["fields"]["numero_electeur"]+' class="form-control" />'
+                      +'<input type="hidden" name="numero_identite" value='+jsonData[i]["fields"]["numero_identite"]+' class="form-control" />'
+                    +'<input type="text" name="nom" value='+jsonData[i]["fields"]["nom"]+' class="form-control" />'
+                    +'</td>'
+                  +'<td>'
+                    +'<input type="text" name="prenom" value='+jsonData[i]["fields"]["prenom"]+' class="form-control" />'
+                  +'</td>'
+                  +'<td>'
+                    +'<select name="region" class="form-control"> <option selected="true" disabled="disabled">Region (All)</option> <option value="Dakar">Dakar</option> <option value="Diourbel">Diourbel</option> <option value="Fatick">Fatick</option> <option value="Kaffrine">Kaffrine</option> <option value="Kaolack">Kaolack</option> <option value="Kédougou">Kédougou</option> <option value="Kolda">Kolda</option> <option value="Louga">Louga</option> <option value="Matam">Matam</option> <option value="Saint-Louis">Saint-Louis</option> <option value="Sédhiou">Sédhiou</option> <option value="Tambacounda">Tambacounda</option> <option value="Thiès">Thiès</option> <option value="Ziguinchor">Ziguinchor</option> </select>'
+                  +'</td>'
+                  +'<td>'
+                      + '<button type="button" id="create_person" person_id='+jsonData[i]["pk"] +' class="btn btn-success btn-sm save_person">Valider</button>'
+                  +'</td>'
+               
+
+
+                +'</tr>'
+          }
+          $('.packages_list').html(htmlContent)
+      }
+    })
+})
+
+$(document).on("click", ".save_person", function () {
+
+
+
+    //$('.error_new_package').hide()
+    $.ajax({
+      type:"POST",
+      url: '{% url "create_person" %}',
+      data: {
+
+        'numero_electeur' :$("input[name=numero_electeur]").val(),
+        'numero_identite' :$("input[name=numero_identite]").val(),
+        'nom' :$("input[name=nom]").val(),
+        'prenom' :$("input[name=prenom]").val(),
+        'region': $('select[name="region"] option:selected').val(),
+        
+
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+
+      },
+      dataType: 'json',
+      success: function (data) {
+        console.log('returned data: ', data)
+        if (data['has_error'] == - 1) {
+          $('.error_new_package').show()
+          $('.error_new_package').html(data['error'])
+        }else{
+
+          console.log("data ", data)
+          alert("enregistrer avec succes")
+          document.location.reload()
+
+         /* $('#new_package').modal('toggle');
+
+          $("input[name=tracking_number]").val('')
+          $("input[name=content]").val('')
+          $("input[name=package_price]").val('')
+
+          const tr_id = "package_"+data['package_id']
+          var new_package_line = '<tr id="'+tr_id+'">'
+
+                +'<td>'+data['tracking_number']+'</td>'
+                +'<td>'+data['content']+'</td>'
+                +'<td>'+data['status']+'</td>'
+
+                +'<td>'
+                  +'<button type="button"  package_id="'+data['package_id']+'" class="btn btn-info assign_package package_"'+data["package_id"]+'" data-toggle="modal assign_package" data-target="#assign_package">Assigner colis </button>&nbsp;'
+                  +'<button type="button"  package_id="'+data['package_id']+'" class="btn btn-info edit_package" data-toggle="modal edit_package" data-target="#edit_package"">Modifier</button>&nbsp;'
+                  +'<button type="button"  package_id="'+data['package_id']+'" class="btn btn-info delete_package_btn">Suppprimer</button>'
+                +'</td>'
+
+              +'</tr>'
+
+          $('.packages_list').append(new_package_line)*/
+        }
+
+      }
+    })
+  
+
+});
+
+
   
   </script>
 {% endblock %}
 {% block content %}
-<h1>{{ title }}</h1>
+<div class="row">
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Dakar <span class="label label-rouded label-danger"> {{ dakar }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Diourbel <span class="label label-rouded label-danger"> {{ diourbel }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Fatick <span class="label label-rouded label-danger"> {{ fatick }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Kaffrine <span class="label label-rouded label-danger"> {{ kaffrine }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Kaolack <span class="label label-rouded label-danger"> {{ kaolack }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Kédougou <span class="label label-rouded label-danger"> {{ kedougou }}</span>
+      </button>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Matam <span class="label label-rouded label-danger"> {{ matam }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Saint-Louis <span class="label label-rouded label-danger"> {{ saint_louis }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Sédhiou <span class="label label-rouded label-danger"> {{ sedhiou }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Tambacounda <span class="label label-rouded label-danger"> {{ tambacounda }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Thies <span class="label label-rouded label-danger"> {{ thies }}</span>
+      </button>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary">
+        Ziguinchor <span class="label label-rouded label-danger"> {{ ziguinchor }}</span>
+      </button>
+  </div>
+  
+  <div class="col-md-2 m-t-20">
+    <button type="button" class="btn btn-primary">
+        Kolda <span class="label label-rouded label-danger"> {{ kolda }}</span>
+      </button>
+  </div>
+  <div class="col-md-2 m-t-20">
+    <button type="button" class="btn btn-primary">
+        Louga <span class="label label-rouded label-danger"> {{ louga }}</span>
+      </button>
+  </div>
+</div>
 
-<div class="container-fluid">
+<hr display="4" class="m-t-20">
+
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
           <form class="form-inline">
               <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">numero electeur</span>
-                </div>
-                <input type="text" id="q" name="keywords" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                <input type="text" id="q" name="keyword" class="form-control search" placeholder="numéro électeur" aria-label="Username" aria-describedby="basic-addon1">
               </div>
             </form>
       </div>
@@ -32,8 +214,25 @@
  
     </div>
     <div class="col-md-6">
+
+        <table id="myTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Région</th>
+                    <th>Actions</th>
+  
+  
+                </tr>
+            </thead>
+            <tbody class="packages_list">
+  
+                
+            </tbody>
+        </table>
       
-      <div class="form">
+      <!----<div class="form">
         <form action="" method="post">
           <div class="form-group">
             <label for="exampleFormControlInput1">Nom de l'electeur</label>
@@ -58,9 +257,26 @@
             <input type="submit" value="Valider" class="btn btn-outline-success">
           </div>
         </form>
-      </div>
+      </div>-->
     </div>
   </div>
-</div>
 
-{% endblock content %}
+
+  <div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card p-30">
+            <div class="media">
+                <div class="media-left meida media-middle">
+                    <span><i class="fa fa-vcard-o f-s-40 color-primary"></i></span>
+                </div>
+                <div class="media-body media-text-right">
+                    <h2>{{ total }}</h2>
+                    <p class="m-b-0">Nombre total</p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+{% endblock %}

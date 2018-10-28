@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block branding %}
+
+  <h1 id="head"> Xarala Area</h1>
+
+{% endblock %}
+
+{% block extrastyle %}
+
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+
+{% endblock %}
+
+{% block usertools %}
+
+<div id="user-tools" class="text-warning">
+      Bienvenue,<strong >{{ user }}</strong>.
+      <a href="/">mon site</a> /
+      <a href="/admin/password_change/">Modifier le mot de passe</a> /
+      <a href="/admin/logout/">Déconnexion</a>
+</div>
+
+{% endblock %}

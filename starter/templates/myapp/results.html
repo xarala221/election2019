@@ -3,22 +3,27 @@
 <table class="table">
     <thead class="thead-dark">
       <tr>
-        <th scope="col">#</th>
+        
         <th scope="col">Nom</th>
-        <th scope="col">Prenom</th>
-        <th scope="col">Numero electeur</th>
-        <th scope="col">Numero identite</th>
+        <th scope="col">Prénom</th>
+        <th scope="col">N° Elec</th>
+        <th scope="col">Nin</th>
+        <th>Actions</th>
+        
       </tr>
     </thead>
     <tbody>
         {% for electeur in results %}
       <tr>
-        <th scope="row">1</th>
+        
         <td>{{ electeur.prenom }}</td>
         <td>{{ electeur.nom }}</td>
         <td>{{ electeur.numero_electeur }}</td>
         <td>{{ electeur.numero_identite }}</td>
+
+        <td colspan="4"><button type="button" person_id = "{{  electeur.id  }}" class="btn btn-info btn-sm my_result">OK</button></td>
       </tr>
+      
       {% endfor %}
       
     </tbody>
